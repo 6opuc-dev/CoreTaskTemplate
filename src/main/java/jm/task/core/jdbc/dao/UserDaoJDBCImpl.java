@@ -13,7 +13,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS `usersdb`.`users` (\n" +
+        String sql = "CREATE TABLE IF NOT EXISTS users (\n" +
                 "  `id` BIGINT(19) NOT NULL AUTO_INCREMENT,\n" +
                 "  `name` VARCHAR(45) NOT NULL,\n" +
                 "  `lastname` VARCHAR(45) NOT NULL,\n" +
@@ -28,7 +28,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        String sql = "DROP TABLE IF EXISTS `usersdb`.`users`";
+        String sql = "DROP TABLE IF EXISTS users";
 
         try (Connection conn = Util.getConnection(); PreparedStatement statement = conn.prepareStatement(sql);) {
             statement.executeUpdate();
@@ -42,13 +42,14 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (Connection conn = Util.getConnection(); Statement statement = conn.createStatement();) {
             statement.execute(sql);
+            System.out.println("User с именем - " + name + " добавлен в базу данных");
         }catch (SQLException exception) {
             exception.printStackTrace();
         }
     }
 
     public void removeUserById(long id) {
-        String sql = "DELETE FROM usersdb.users WHERE id=" + id;
+        String sql = "DELETE FROM users WHERE id=" + id;
         try (Connection conn = Util.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.executeUpdate();
@@ -58,7 +59,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public List<User> getAllUsers() {
-        String sql = "SELECT * FROM 'usersdb'.'users'";
+        String sql = "SELECT * FROM users";
         List<User> userList = new ArrayList<>();
 
         try (Connection conn = Util.getConnection()) {
@@ -74,11 +75,14 @@ public class UserDaoJDBCImpl implements UserDao {
         }catch (SQLException exception) {
             exception.printStackTrace();
         }
+        for (User user : userList) {
+            System.out.println(user);
+        }
         return userList;
     }
 
     public void cleanUsersTable() {
-        String sql = "TRUNCATE `usersdb`.`users`";
+        String sql = "TRUNCATE users";
 
         try (Connection conn = Util.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(sql);
