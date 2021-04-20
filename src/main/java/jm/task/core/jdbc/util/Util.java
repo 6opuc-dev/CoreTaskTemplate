@@ -10,6 +10,7 @@ public class Util {
     private static final String URL = "jdbc:mysql://localhost:3306/usersdb?serverTimezone=Europe/Moscow&useSSL=false";
     private static final String USER = "root";
     private static final String PASSWORD = "root";
+    private static SessionFactory sessionFactory = null;
 
 
     public static Connection getConnection() throws SQLException {
@@ -17,12 +18,15 @@ public class Util {
     }
 
     public static SessionFactory getSession() {
-        Configuration configuration = new Configuration();
-        configuration.addAnnotatedClass(User.class);
-        configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-        configuration.setProperty("hibernate.connection.url", URL);
-        configuration.setProperty("hibernate.connection.username", USER);
-        configuration.setProperty("hibernate.connection.password", PASSWORD);
-        return configuration.buildSessionFactory();
+        if (sessionFactory == null) {
+            Configuration configuration = new Configuration();
+            configuration.addAnnotatedClass(User.class);
+            configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
+            configuration.setProperty("hibernate.connection.url", URL);
+            configuration.setProperty("hibernate.connection.username", USER);
+            configuration.setProperty("hibernate.connection.password", PASSWORD);
+            sessionFactory = configuration.buildSessionFactory();
+        }
+        return sessionFactory;
     }
 }
