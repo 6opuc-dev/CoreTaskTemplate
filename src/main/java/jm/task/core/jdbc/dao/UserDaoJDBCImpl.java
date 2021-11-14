@@ -38,8 +38,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-//        String sql = "INSERT INTO users (name, lastname, age) VALUES ('"+ name + "', '" + lastName + "', " + age + ");";
-          String sql = "INSERT INTO users (name, lastname, age) VALUES (?, ?, ?)";
+//        String sql = String.format("INSERT INTO users (name, lastname, age) VALUES ('%s', '%s', %s);", name, lastName, age);
+          String sql = "INSERT INTO users(name, lastname, age) VALUES (?, ?, ?)";
         try (Connection conn = Util.getConnection(); PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, name);
             statement.setString(2, lastName);
